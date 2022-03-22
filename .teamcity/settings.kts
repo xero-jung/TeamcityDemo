@@ -1,3 +1,4 @@
+import com.xero.platform.PullRequestBuild
 import jetbrains.buildServer.configs.kotlin.v2019_2.*
 import jetbrains.buildServer.configs.kotlin.v2019_2.buildFeatures.PullRequests
 import jetbrains.buildServer.configs.kotlin.v2019_2.buildFeatures.commitStatusPublisher
@@ -32,57 +33,7 @@ version = "2021.1"
 
 project {
 
-    buildType(Build)
+    buildType(PullRequestBuild)
 }
 
-object Build : BuildType({
-    name = "Build"
 
-    vcs {
-        root(DslContext.settingsRoot)
-    }
-
-    triggers {
-        vcs {
-        }
-    }
-
-    features {
-        dockerSupport {
-            loginToRegistry = on {
-                dockerRegistryId = "PROJECT_EXT_200"
-            }
-        }
-        pullRequests {
-            vcsRootExtId = "${DslContext.settingsRoot.id}"
-            provider = github {
-                authType = token {
-                    token = "credentialsJSON:79368620-1319-497a-9ed3-ad475628e2c6"
-                }
-                filterAuthorRole = PullRequests.GitHubRoleFilter.MEMBER
-            }
-        }
-        commitStatusPublisher {
-            vcsRootExtId = "${DslContext.settingsRoot.id}"
-            publisher = github {
-                githubUrl = "https://api.github.com"
-                authType = personalToken {
-                    token = "credentialsJSON:79368620-1319-497a-9ed3-ad475628e2c6"
-                }
-            }
-        }
-    }
-
-    requirements {
-        equals("docker.server.osType", "linux")
-        moreThan("teamcity.agent.work.dir.freeSpaceMb", "10000")
-    }
-
-    steps {
-        gradle {
-            name = "Run help task"
-            useGradleWrapper = true
-            tasks = "help"
-        }
-    }
-})
