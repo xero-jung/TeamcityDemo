@@ -3,6 +3,7 @@ import jetbrains.buildServer.configs.kotlin.v2019_2.buildFeatures.PullRequests
 import jetbrains.buildServer.configs.kotlin.v2019_2.buildFeatures.commitStatusPublisher
 import jetbrains.buildServer.configs.kotlin.v2019_2.buildFeatures.dockerSupport
 import jetbrains.buildServer.configs.kotlin.v2019_2.buildFeatures.pullRequests
+import jetbrains.buildServer.configs.kotlin.v2019_2.buildSteps.gradle
 import jetbrains.buildServer.configs.kotlin.v2019_2.triggers.vcs
 
 /*
@@ -75,5 +76,13 @@ object Build : BuildType({
     requirements {
         equals("docker.server.osType", "linux")
         moreThan("teamcity.agent.work.dir.freeSpaceMb", "10000")
+    }
+
+    steps {
+        gradle {
+            name = "Run help task"
+            useGradleWrapper = true
+            tasks = "help"
+        }
     }
 })
