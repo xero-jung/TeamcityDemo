@@ -41,4 +41,8 @@ object Build : BuildType({
         vcs {
         }
     }
+
+    requirements {
+        equals("docker.server.osType", "linux")
+    }
 })
