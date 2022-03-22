@@ -44,5 +44,6 @@ object Build : BuildType({
 
     requirements {
         equals("docker.server.osType", "linux")
+        moreThan("teamcity.agent.work.dir.freeSpaceMb", "10000")
     }
 })
