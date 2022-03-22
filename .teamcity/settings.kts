@@ -1,5 +1,7 @@
 import jetbrains.buildServer.configs.kotlin.v2019_2.*
+import jetbrains.buildServer.configs.kotlin.v2019_2.buildFeatures.PullRequests
 import jetbrains.buildServer.configs.kotlin.v2019_2.buildFeatures.dockerSupport
+import jetbrains.buildServer.configs.kotlin.v2019_2.buildFeatures.pullRequests
 import jetbrains.buildServer.configs.kotlin.v2019_2.triggers.vcs
 
 /*
@@ -47,6 +49,15 @@ object Build : BuildType({
         dockerSupport {
             loginToRegistry = on {
                 dockerRegistryId = "PROJECT_EXT_200"
+            }
+        }
+        pullRequests {
+            vcsRootExtId = "${DslContext.settingsRoot.id}"
+            provider = github {
+                authType = token {
+                    token = "credentialsJSON:79368620-1319-497a-9ed3-ad475628e2c6"
+                }
+                filterAuthorRole = PullRequests.GitHubRoleFilter.MEMBER
             }
         }
     }
